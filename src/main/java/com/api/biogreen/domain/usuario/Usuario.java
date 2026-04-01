@@ -9,6 +9,7 @@ import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 import java.util.Collection;
 import java.util.List;
 
@@ -28,6 +29,13 @@ public class Usuario implements UserDetails {
     private String email;
     private String senha;
     private UsuarioRole role;
+
+    public Usuario(@Valid DadosCadastroUsuarioDTO dados) {
+        this.nome = dados.getNome();
+        this.email = dados.getEmail();
+        this.senha = dados.getSenha();
+        this.role = dados.getRole();
+    }
 
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
