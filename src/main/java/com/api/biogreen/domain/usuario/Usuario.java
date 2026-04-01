@@ -28,12 +28,14 @@ public class Usuario implements UserDetails {
     private String nome;
     private String email;
     private String senha;
+
+    @Enumerated(EnumType.STRING)
     private UsuarioRole role;
 
-    public Usuario(@Valid DadosCadastroUsuarioDTO dados) {
+    public Usuario(@Valid DadosCadastroUsuarioDTO dados, String senhaEncriptografada) {
         this.nome = dados.getNome();
         this.email = dados.getEmail();
-        this.senha = dados.getSenha();
+        this.senha = senhaEncriptografada;
         this.role = dados.getRole();
     }
 

@@ -24,8 +24,8 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .antMatchers(HttpMethod.POST, "/auth/cadastro").permitAll()
-                        .antMatchers(HttpMethod.POST, "/manual").hasRole("ADMIN")
-                        .antMatchers(HttpMethod.POST, "/local-descarte").hasRole("ADMIN")
+//                        .antMatchers(HttpMethod.POST, "/manual").hasRole("ADMIN")
+//                        .antMatchers(HttpMethod.POST, "/local-descarte").hasRole("ADMIN")
                         .anyRequest().authenticated()
                 )
                 .build();
