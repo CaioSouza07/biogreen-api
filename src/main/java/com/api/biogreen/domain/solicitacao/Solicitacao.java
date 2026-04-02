@@ -23,9 +23,10 @@ public class Solicitacao {
     @Column(nullable = false)
     private String descricao;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "foto_url")
     private String fotoUrl;
 
+    @Column(nullable = false)
     @Enumerated(EnumType.STRING)
     private SolicitacaoStatus status;
 
