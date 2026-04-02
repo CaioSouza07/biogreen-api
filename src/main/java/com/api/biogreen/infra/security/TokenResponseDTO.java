@@ -1,10 +1,10 @@
-package com.api.biogreen.domain.usuario;
+package com.api.biogreen.infra.security;
 
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 
 @AllArgsConstructor
 @Getter
-public final class DadosLoginRespostaDTO {
+public final class TokenResponseDTO {
     private final String token;
 }
