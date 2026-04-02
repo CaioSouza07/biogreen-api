@@ -1,9 +1,6 @@
 package com.api.biogreen.infra.security;
 
-import com.api.biogreen.domain.usuario.DadosCadastroUsuarioDTO;
-import com.api.biogreen.domain.usuario.DadosLoginUsuarioDTO;
-import com.api.biogreen.domain.usuario.Usuario;
-import com.api.biogreen.domain.usuario.UsuarioRepository;
+import com.api.biogreen.domain.usuario.*;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.authentication.AuthenticationManager;
@@ -24,13 +21,16 @@ public class AutenticacaoController {
 
     private final AuthenticationManager authenticationManager;
     private final UsuarioRepository repository;
+    private final TokenService tokenService;
 
     @PostMapping("/login")
     public ResponseEntity login(@RequestBody @Valid DadosLoginUsuarioDTO dados){
         var usernamePassword = new UsernamePasswordAuthenticationToken(dados.getEmail(), dados.getSenha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.gerarToken((Usuario) auth.getPrincipal());
+
+        return ResponseEntity.ok(new DadosLoginRespostaDTO(token));
     }
 
     @PostMapping("/cadastro")
