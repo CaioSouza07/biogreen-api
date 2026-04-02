@@ -41,7 +41,9 @@ public class AutenticacaoController {
 
         this.repository.save(usuario);
 
-        return ResponseEntity.ok().build();
+        var token = tokenService.gerarToken(usuario);
+
+        return ResponseEntity.ok(new TokenResponseDTO(token));
     }
 
 }
