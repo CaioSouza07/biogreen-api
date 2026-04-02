@@ -23,7 +23,7 @@ public class AutenticacaoController {
     private final TokenService tokenService;
 
     @PostMapping("/login")
-    public ResponseEntity login(@RequestBody @Valid DadosLoginUsuarioDTO dados){
+    public ResponseEntity<TokenResponseDTO> login(@RequestBody @Valid DadosLoginUsuarioDTO dados){
         var usernamePassword = new UsernamePasswordAuthenticationToken(dados.getEmail(), dados.getSenha());
         var auth = this.authenticationManager.authenticate(usernamePassword);
 
@@ -33,7 +33,7 @@ public class AutenticacaoController {
     }
 
     @PostMapping("/cadastro")
-    public ResponseEntity cadastro(@RequestBody @Valid DadosCadastroUsuarioDTO dados){
+    public ResponseEntity<TokenResponseDTO> cadastro(@RequestBody @Valid DadosCadastroUsuarioDTO dados){
         if (this.repository.findByEmail(dados.getEmail()) != null) return ResponseEntity.badRequest().build();
 
         String senhaEncriptografada = new BCryptPasswordEncoder().encode(dados.getSenha());

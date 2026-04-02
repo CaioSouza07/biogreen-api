@@ -2,6 +2,7 @@ package com.api.biogreen.infra.exception;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
@@ -22,6 +23,12 @@ public class GlobalExceptionHandler {
     public ResponseEntity<ErrorResponseDTO> handleBadRequestException(BadRequestException e){
         var response = new ErrorResponseDTO(e.getMessage(), HttpStatus.BAD_REQUEST.value(), null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
+
+    @ExceptionHandler(AuthenticationException.class)
+    public ResponseEntity<ErrorResponseDTO> handleAuthenticationException(AuthenticationException e){
+        var response = new ErrorResponseDTO("Credenciais inválidas", HttpStatus.UNAUTHORIZED.value(), null);
+        return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body(response);
     }
 
     @ExceptionHandler(MethodArgumentNotValidException.class)
