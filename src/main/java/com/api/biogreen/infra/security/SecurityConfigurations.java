@@ -1,6 +1,5 @@
 package com.api.biogreen.infra.security;
 
-import com.api.biogreen.infra.exception.TokenInvalidoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -30,6 +29,7 @@ public class SecurityConfigurations {
                 .authorizeHttpRequests(authorize -> authorize
                         .antMatchers(HttpMethod.POST, "/auth/login").permitAll()
                         .antMatchers(HttpMethod.POST, "/auth/cadastro").permitAll()
+                        .antMatchers("/solicitacao/admin/**").hasRole("ADMIN")
 //                        .antMatchers(HttpMethod.POST, "/manual").hasRole("ADMIN")
 //                        .antMatchers(HttpMethod.POST, "/local-descarte").hasRole("ADMIN")
                         .anyRequest().authenticated()

@@ -34,6 +34,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
     }
 
+    @ExceptionHandler(UsuarioNaoPermitidoException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUsuarioNaoPermitidoException(UsuarioNaoPermitidoException e){
+        var response = new ErrorResponseDTO(e.getMessage(), HttpStatus.FORBIDDEN.value(), null);
+        return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDTO> handleValidationBadRequestException(MethodArgumentNotValidException e){
         var errors = e.getFieldErrors();
@@ -61,5 +67,7 @@ public class GlobalExceptionHandler {
         var response = new ErrorResponseDTO("Arquivo excedeu tamanho permitido, máximo de 10MB por arquivo", HttpStatus.BAD_REQUEST.value(), null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
+
+
 
 }

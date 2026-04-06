@@ -5,6 +5,9 @@ import com.api.biogreen.domain.solicitacao.DadosDetalhamentoSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.SolicitacaoService;
 import com.api.biogreen.infra.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
@@ -38,16 +41,27 @@ public class SolicitacaoController {
         return ResponseEntity.created(uri).body(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
     }
 
+    @GetMapping
+    public ResponseEntity<Page<DadosDetalhamentoSolicitacaoDTO>> listarSolicitacoes(@PageableDefault(size = 10) Pageable paginacao){
+        var page = solicitacaoService.listarSolicitacoes(paginacao);
+        return ResponseEntity.ok(page);
+    }
+
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id){
         var solicitacao = solicitacaoService.detalhar(id);
-
         return ResponseEntity.ok(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
     }
 
+    @DeleteMapping("admin/{id}")
+    public ResponseEntity deletarAdmin(@PathVariable Long id){
+        solicitacaoService.deletarAdmin(id);
+        return ResponseEntity.noContent().build();
+    }
+
     @DeleteMapping("/{id}")
-    public ResponseEntity deletar(@PathVariable Long id){
-        solicitacaoService.deletar(id);
+    public ResponseEntity deletar(@PathVariable Long id, Authentication authentication){
+        solicitacaoService.deletar(id, authentication);
         return ResponseEntity.noContent().build();
     }
 
