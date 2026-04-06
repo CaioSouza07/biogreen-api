@@ -45,4 +45,10 @@ public class SolicitacaoController {
         return ResponseEntity.ok(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
     }
 
+    @DeleteMapping("/{id}")
+    public ResponseEntity deletar(@PathVariable Long id){
+        solicitacaoService.deletar(id);
+        return ResponseEntity.noContent().build();
+    }
+
 }

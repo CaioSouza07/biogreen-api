@@ -1,12 +1,14 @@
 package com.api.biogreen.domain.solicitacao;
 
 import com.api.biogreen.domain.usuario.Usuario;
+import com.api.biogreen.infra.exception.BadRequestException;
 import com.api.biogreen.infra.exception.UploadImagemException;
 import com.api.biogreen.utils.TratadorArquivo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
@@ -14,6 +16,7 @@ import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.nio.file.StandardCopyOption;
+import java.util.Optional;
 import java.util.UUID;
 
 @Service
@@ -25,6 +28,7 @@ public class SolicitacaoService {
     @Value("${api.upload-dir.solicitacoes}")
     private String uploadDir;
 
+    @Transactional
     public Solicitacao cadastrar(DadosCadastroSolicitacaoDTO dados, MultipartFile foto, Authentication autenticado){
 
         Path diretorio = Paths.get(uploadDir);
@@ -48,8 +52,28 @@ public class SolicitacaoService {
 
     }
 
-
     public Solicitacao detalhar(Long id) {
-        return repository.getReferenceById(id);
+        Optional<Solicitacao> solicitacao = repository.findById(id);
+        if (solicitacao.isEmpty()) throw new BadRequestException("Não existe nenhuma solicitação com esse id");
+        return solicitacao.get();
+    }
+
+    @Transactional
+    public void deletar(Long id) {
+        Optional<Solicitacao> solicitacao = repository.findById(id);
+        if (solicitacao.isEmpty()) throw new BadRequestException("Não existe nenhuma solicitação com esse id");
+
+        Path diretorio = Paths.get(solicitacao.get().getFotoUrl());
+
+        try {
+            System.out.println(diretorio.resolve(solicitacao.get().getFotoUrl()));
+            Files.deleteIfExists(diretorio);
+
+        } catch (IOException e) {
+            throw new UploadImagemException("Erro interno ao deletar a imagem da foto");
+        }
+
+        repository.delete(solicitacao.get());
+
     }
 }
