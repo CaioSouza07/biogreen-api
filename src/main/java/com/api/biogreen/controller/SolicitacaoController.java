@@ -1,5 +1,6 @@
 package com.api.biogreen.controller;
 
+import com.api.biogreen.domain.solicitacao.DadosAtualizarSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosCadastroSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosDetalhamentoSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.SolicitacaoService;
@@ -29,8 +30,8 @@ public class SolicitacaoController {
             @RequestPart("dados") @Valid DadosCadastroSolicitacaoDTO dados,
             @RequestParam("file") MultipartFile foto,
             Authentication autenticado,
-            UriComponentsBuilder uriBuilder){
-
+            UriComponentsBuilder uriBuilder
+    ){
         if (foto.isEmpty()) throw new BadRequestException("É necessário adicionar uma foto para cadastrar");
         if (!foto.getContentType().startsWith("image")) throw new BadRequestException("Arquivo deve ser uma imagem");
 
@@ -39,6 +40,18 @@ public class SolicitacaoController {
         var uri = uriBuilder.path("solicitacao/{id}").buildAndExpand(solicitacao.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
+    }
+
+    @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
+    public ResponseEntity atualizar(
+            @RequestPart("dados") @Valid DadosAtualizarSolicitacaoDTO dados,
+            @RequestParam("file") MultipartFile foto,
+            Authentication authentication
+    ){
+        if (foto.isEmpty()) throw new BadRequestException("É necessário adicionar uma foto para cadastrar");
+        if (!foto.getContentType().startsWith("image")) throw new BadRequestException("Arquivo deve ser uma imagem");
+
+        var solicitacao = solicitacaoService.atualizar(dados, foto, authentication);
     }
 
     @GetMapping
