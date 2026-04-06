@@ -1,5 +1,8 @@
-package com.api.biogreen.domain.solicitacao;
+package com.api.biogreen.controller;
 
+import com.api.biogreen.domain.solicitacao.DadosCadastroSolicitacaoDTO;
+import com.api.biogreen.domain.solicitacao.DadosDetalhamentoSolicitacaoDTO;
+import com.api.biogreen.domain.solicitacao.SolicitacaoService;
 import com.api.biogreen.infra.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.MediaType;
@@ -33,6 +36,13 @@ public class SolicitacaoController {
         var uri = uriBuilder.path("solicitacao/{id}").buildAndExpand(solicitacao.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
+    }
+
+    @GetMapping("/{id}")
+    public ResponseEntity detalhar(@PathVariable Long id){
+        var solicitacao = solicitacaoService.detalhar(id);
+
+        return ResponseEntity.ok(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
     }
 
 }

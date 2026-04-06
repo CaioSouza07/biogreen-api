@@ -49,7 +49,7 @@ public class SolicitacaoService {
     }
 
 
-
-
-
+    public Solicitacao detalhar(Long id) {
+        return repository.getReferenceById(id);
+    }
 }

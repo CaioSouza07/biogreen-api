@@ -7,6 +7,7 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import org.springframework.web.multipart.MaxUploadSizeExceededException;
 import org.springframework.web.multipart.MultipartException;
 
 import java.util.stream.Collectors;
@@ -55,10 +56,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-//    @ExceptionHandler(MultipartException.class)
-//    public ResponseEntity<ErrorResponseDTO> handleMultipartException(MultipartException e){
-//        var response = new ErrorResponseDTO("Erro na leitura da foto, formato inválido", HttpStatus.BAD_REQUEST.value(), null);
-//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-//    }
+    @ExceptionHandler(MaxUploadSizeExceededException.class)
+    public ResponseEntity<ErrorResponseDTO> handleMaxUploadSizeExceededException(MaxUploadSizeExceededException e){
+        var response = new ErrorResponseDTO("Arquivo excedeu tamanho permitido, máximo de 10MB por arquivo", HttpStatus.BAD_REQUEST.value(), null);
+        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+    }
 
 }
