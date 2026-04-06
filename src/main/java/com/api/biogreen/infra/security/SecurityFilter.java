@@ -1,6 +1,7 @@
 package com.api.biogreen.infra.security;
 
 import com.api.biogreen.domain.usuario.UsuarioRepository;
+import com.api.biogreen.infra.exception.TokenInvalidoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.authentication.UsernamePasswordAuthenticationToken;
 import org.springframework.security.core.context.SecurityContextHolder;

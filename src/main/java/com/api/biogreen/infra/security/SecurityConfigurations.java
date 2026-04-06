@@ -1,5 +1,6 @@
 package com.api.biogreen.infra.security;
 
+import com.api.biogreen.infra.exception.TokenInvalidoException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;

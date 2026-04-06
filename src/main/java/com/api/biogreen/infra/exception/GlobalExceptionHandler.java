@@ -27,6 +27,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
+    @ExceptionHandler(UploadImagemException.class)
+    public ResponseEntity<ErrorResponseDTO> handleUploadImagemException(UploadImagemException e){
+        var response = new ErrorResponseDTO(e.getMessage(), HttpStatus.INTERNAL_SERVER_ERROR.value(), null);
+        return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body(response);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDTO> handleValidationBadRequestException(MethodArgumentNotValidException e){
         var errors = e.getFieldErrors();
@@ -49,10 +55,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 
-    @ExceptionHandler(MultipartException.class)
-    public ResponseEntity<ErrorResponseDTO> handleMultipartException(MultipartException e){
-        var response = new ErrorResponseDTO("Erro na leitura da foto, formato inválido", HttpStatus.BAD_REQUEST.value(), null);
-        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
-    }
+//    @ExceptionHandler(MultipartException.class)
+//    public ResponseEntity<ErrorResponseDTO> handleMultipartException(MultipartException e){
+//        var response = new ErrorResponseDTO("Erro na leitura da foto, formato inválido", HttpStatus.BAD_REQUEST.value(), null);
+//        return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
+//    }
 
 }

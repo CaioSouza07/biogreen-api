@@ -7,6 +7,7 @@ import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.Valid;
 
 @Entity
 @Table(name = "solicitacoes")
@@ -34,4 +35,10 @@ public class Solicitacao {
     @JoinColumn(name = "usuario_id")
     private Usuario solicitante;
 
+    public Solicitacao(@Valid DadosCadastroSolicitacaoDTO dados, String fotoUrl, Usuario usuario) {
+        this.descricao = dados.getDescricao();
+        this.fotoUrl = fotoUrl;
+        this.status = dados.getStatus();
+        this.solicitante = usuario;
+    }
 }
