@@ -71,12 +71,6 @@ public class SolicitacaoController {
         return ResponseEntity.ok(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
     }
 
-    @DeleteMapping("admin/{id}")
-    public ResponseEntity deletarAdmin(@PathVariable Long id){
-        solicitacaoService.deletarAdmin(id);
-        return ResponseEntity.noContent().build();
-    }
-
     @DeleteMapping("/{id}")
     public ResponseEntity deletar(@PathVariable Long id, Authentication authentication){
         solicitacaoService.deletar(id, authentication);

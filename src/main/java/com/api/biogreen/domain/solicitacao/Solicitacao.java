@@ -44,7 +44,13 @@ public class Solicitacao {
     }
 
     public void validarPermissaoRemocao(Usuario usuario){
-        if(!this.solicitante.equals(usuario)) throw new UsuarioNaoPermitidoException("Apenas o usuário que cadastrou a solicitação pode remove-la");
+        if (usuario.isAdmin()){
+            return;
+        }
+
+        if(!this.solicitante.equals(usuario)){
+            throw new UsuarioNaoPermitidoException("Apenas o autor pode efetuar alterações ou remoção nessa solicitção");
+        }
     }
 
     public void atualizarInformacoes(DadosAtualizarSolicitacaoDTO dados) {

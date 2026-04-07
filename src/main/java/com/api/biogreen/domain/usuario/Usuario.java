@@ -42,6 +42,10 @@ public class Usuario implements UserDetails {
         this.role = dados.getRole();
     }
 
+    public boolean isAdmin(){
+        return this.role == UsuarioRole.ADMIN;
+    }
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
         if(this.role == UsuarioRole.ADMIN) return List.of(new SimpleGrantedAuthority("ROLE_ADMIN"), new SimpleGrantedAuthority("ROLE_USER"));

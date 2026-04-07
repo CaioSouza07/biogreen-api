@@ -1,28 +1,17 @@
 package com.api.biogreen.domain.solicitacao;
 
 import com.api.biogreen.domain.usuario.Usuario;
-import com.api.biogreen.infra.exception.UsuarioNaoPermitidoException;
 import com.api.biogreen.infra.exception.BadRequestException;
-import com.api.biogreen.infra.exception.UploadImagemException;
 import com.api.biogreen.infra.files.FilesService;
-import com.api.biogreen.utils.TratadorArquivo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
-import org.springframework.http.ResponseEntity;
 import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.web.bind.annotation.RequestPart;
 import org.springframework.web.multipart.MultipartFile;
 
-import java.io.IOException;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.Optional;
-import java.util.UUID;
 
 @Service
 @RequiredArgsConstructor
@@ -66,16 +55,6 @@ public class SolicitacaoService {
         Solicitacao solicitacao = repository.findById(id)
                 .orElseThrow(() -> new BadRequestException("Solicitação não encontrada"));
         solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
-
-        filesService.deletar(solicitacao.getFotoUrl());
-        repository.delete(solicitacao);
-    }
-
-    @Transactional
-    public void deletarAdmin(Long id) {
-
-        Solicitacao solicitacao = repository.findById(id)
-                .orElseThrow(() -> new BadRequestException("Solicitação não encontrada"));
 
         filesService.deletar(solicitacao.getFotoUrl());
         repository.delete(solicitacao);
