@@ -4,6 +4,7 @@ import com.api.biogreen.domain.usuario.Usuario;
 import com.api.biogreen.infra.exception.UsuarioNaoPermitidoException;
 import com.api.biogreen.infra.exception.BadRequestException;
 import com.api.biogreen.infra.exception.UploadImagemException;
+import com.api.biogreen.infra.files.FilesService;
 import com.api.biogreen.utils.TratadorArquivo;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -28,6 +29,7 @@ import java.util.UUID;
 public class SolicitacaoService {
 
     private final SolicitacaoRepository repository;
+    private final FilesService filesService;
 
     @Value("${api.upload-dir.solicitacoes}")
     private String uploadDir;
@@ -36,17 +38,8 @@ public class SolicitacaoService {
     @Transactional
     public Solicitacao cadastrar(DadosCadastroSolicitacaoDTO dados, MultipartFile foto, Authentication autenticado){
 
-        Path diretorio = Paths.get(uploadDir);
-        Path caminhoExportar = diretorio.resolve(UUID.randomUUID() + TratadorArquivo.obterExtensao(foto.getOriginalFilename()));
-
-        try {
-            foto.transferTo(caminhoExportar);
-        } catch (IOException e) {
-            throw new UploadImagemException("Erro interno ao salvar a imagem da solicitação no diretório");
-        }
-
-        var usuario = (Usuario) autenticado.getPrincipal();
-        var solicitacao = new Solicitacao(dados, caminhoExportar.toString(), usuario);
+        var caminhoExportar = filesService.salvar(uploadDir, foto);
+        var solicitacao = new Solicitacao(dados, caminhoExportar, (Usuario) autenticado.getPrincipal());
 
         repository.save(solicitacao);
 
@@ -55,69 +48,44 @@ public class SolicitacaoService {
 
     public Solicitacao atualizar(DadosAtualizarSolicitacaoDTO dados, MultipartFile foto, Authentication authentication){
 
-        var solicitacao = repository.findById(dados.getId());
-        var usuarioLogado = (Usuario) authentication.getPrincipal();
-        if (solicitacao.isEmpty()) throw new BadRequestException("Não existe nenhuma solicitação com esse ID");
-        if(!solicitacao.get().getSolicitante().equals(usuarioLogado)) throw new UsuarioNaoPermitidoException("Apenas o usuário que cadastrou a solicitação pode atualiza-la");
+        Solicitacao solicitacao = repository.findById(dados.getId())
+                .orElseThrow(() -> new BadRequestException("Solicitação não encontrada"));
+        solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
 
-        Path diretorio = Paths.get(uploadDir);
-        Path caminhoExportar = diretorio.resolve(UUID.randomUUID() + TratadorArquivo.obterExtensao(foto.getOriginalFilename()));
+        filesService.atualizar(solicitacao.getFotoUrl(), foto);
 
-
+        solicitacao
 
 
-    }
-
-    public Solicitacao detalhar(Long id) {
-        Optional<Solicitacao> solicitacao = repository.findById(id);
-        if (solicitacao.isEmpty()) throw new BadRequestException("Não existe nenhuma solicitação com esse id");
-        return solicitacao.get();
     }
 
     @Transactional
     public void deletar(Long id, Authentication authentication) {
-        var solicitacao = repository.findById(id);
-        if (solicitacao.isEmpty()) throw new BadRequestException("Não existe nenhuma solicitação com esse id");
 
-        Usuario usuarioLogado = (Usuario) authentication.getPrincipal();
-        if(!solicitacao.get().getSolicitante().equals(usuarioLogado)) throw new UsuarioNaoPermitidoException("Apenas o usuário que cadastrou a solicitação pode remove-la");
+        Solicitacao solicitacao = repository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Solicitação não encontrada"));
+        solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
 
-        Path diretorio = Paths.get(solicitacao.get().getFotoUrl());
-
-        try {
-            Files.deleteIfExists(diretorio);
-        } catch (IOException e) {
-            throw new UploadImagemException("Erro interno ao deletar a imagem da foto");
-        }
-
-        repository.delete(solicitacao.get());
-
+        filesService.deletar(solicitacao.getFotoUrl());
+        repository.delete(solicitacao);
     }
 
     @Transactional
     public void deletarAdmin(Long id) {
-        Optional<Solicitacao> solicitacao = repository.findById(id);
-        if (solicitacao.isEmpty()) throw new BadRequestException("Não existe nenhuma solicitação com esse id");
 
-        Path diretorio = Paths.get(solicitacao.get().getFotoUrl());
+        Solicitacao solicitacao = repository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Solicitação não encontrada"));
 
-        try {
-            System.out.println(diretorio.resolve(solicitacao.get().getFotoUrl()));
-            Files.deleteIfExists(diretorio);
+        filesService.deletar(solicitacao.getFotoUrl());
+        repository.delete(solicitacao);
+    }
 
-        } catch (IOException e) {
-            throw new UploadImagemException("Erro interno ao deletar a imagem da foto");
-        }
-
-        repository.delete(solicitacao.get());
-
+    public Solicitacao detalhar(Long id) {
+        return repository.findById(id)
+                .orElseThrow(() -> new BadRequestException("Solicitação não encontrada"));
     }
 
     public Page<DadosDetalhamentoSolicitacaoDTO> listarSolicitacoes(Pageable paginacao) {
         return repository.findAll(paginacao).map(DadosDetalhamentoSolicitacaoDTO::new);
-//        mesma coisa que o de baixo mas em metodo de referencia
-//        return repository.findAll(paginacao).map(p -> new DadosDetalhamentoSolicitacaoDTO(p));
     }
-
-
 }

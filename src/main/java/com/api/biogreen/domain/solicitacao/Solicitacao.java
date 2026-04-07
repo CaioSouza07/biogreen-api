@@ -1,6 +1,7 @@
 package com.api.biogreen.domain.solicitacao;
 
 import com.api.biogreen.domain.usuario.Usuario;
+import com.api.biogreen.infra.exception.UsuarioNaoPermitidoException;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -40,5 +41,9 @@ public class Solicitacao {
         this.fotoUrl = fotoUrl;
         this.status = dados.getStatus();
         this.solicitante = usuario;
+    }
+
+    public void validarPermissaoRemocao(Usuario usuario){
+        if(!this.solicitante.equals(usuario)) throw new UsuarioNaoPermitidoException("Apenas o usuário que cadastrou a solicitação pode remove-la");
     }
 }
