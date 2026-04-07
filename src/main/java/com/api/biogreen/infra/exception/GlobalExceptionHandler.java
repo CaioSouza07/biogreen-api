@@ -58,7 +58,7 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(HttpMessageNotReadableException.class)
     public ResponseEntity<ErrorResponseDTO> handleHttpMessageNotReadableException(HttpMessageNotReadableException e){
-        var response = new ErrorResponseDTO("Erro na leitura da requisição, formato inválido", HttpStatus.BAD_REQUEST.value(), null);
+        var response = new ErrorResponseDTO("Erro na leitura da requisição, formato inválido: " + e.getMessage(), HttpStatus.BAD_REQUEST.value(), null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
 

@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
+import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -34,7 +35,7 @@ public class FilesService {
         Path caminhoArquivo = Paths.get(url);
 
         try {
-            Files.copy(file.getInputStream(), caminhoArquivo, StandardCopyOption.REPLACE_EXISTING);
+            file.transferTo(caminhoArquivo);
         } catch (IOException e) {
             throw new UploadImagemException("Erro interno ao atualizar a imagem");
         }
