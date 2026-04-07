@@ -48,8 +48,11 @@ public class SolicitacaoController {
             @RequestParam("file") MultipartFile foto,
             Authentication authentication
     ){
-        if (foto.isEmpty()) throw new BadRequestException("É necessário adicionar uma foto para cadastrar");
-        if (!foto.getContentType().startsWith("image")) throw new BadRequestException("Arquivo deve ser uma imagem");
+        if (!foto.isEmpty()) {
+            if (!foto.getContentType().startsWith("image")) {
+                throw new BadRequestException("Arquivo deve ser uma imagem");
+            }
+        }
 
         var solicitacao = solicitacaoService.atualizar(dados, foto, authentication);
 

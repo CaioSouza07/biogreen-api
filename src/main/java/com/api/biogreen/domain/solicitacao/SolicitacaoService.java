@@ -53,7 +53,8 @@ public class SolicitacaoService {
                 .orElseThrow(() -> new BadRequestException("Solicitação não encontrada"));
         solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
 
-        filesService.atualizar(solicitacao.getFotoUrl(), foto);
+        if (!foto.isEmpty()) filesService.atualizar(solicitacao.getFotoUrl(), foto);
+
         solicitacao.atualizarInformacoes(dados);
 
         return solicitacao;
