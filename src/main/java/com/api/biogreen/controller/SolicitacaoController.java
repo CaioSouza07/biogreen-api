@@ -52,6 +52,8 @@ public class SolicitacaoController {
         if (!foto.getContentType().startsWith("image")) throw new BadRequestException("Arquivo deve ser uma imagem");
 
         var solicitacao = solicitacaoService.atualizar(dados, foto, authentication);
+
+        return ResponseEntity.ok(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
     }
 
     @GetMapping

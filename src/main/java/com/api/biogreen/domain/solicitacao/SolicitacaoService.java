@@ -46,6 +46,7 @@ public class SolicitacaoService {
         return solicitacao;
     }
 
+    @Transactional
     public Solicitacao atualizar(DadosAtualizarSolicitacaoDTO dados, MultipartFile foto, Authentication authentication){
 
         Solicitacao solicitacao = repository.findById(dados.getId())
@@ -53,10 +54,9 @@ public class SolicitacaoService {
         solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
 
         filesService.atualizar(solicitacao.getFotoUrl(), foto);
+        solicitacao.atualizarInformacoes(dados);
 
-        solicitacao
-
-
+        return solicitacao;
     }
 
     @Transactional

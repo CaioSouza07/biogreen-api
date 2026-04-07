@@ -13,10 +13,8 @@ public final class DadosAtualizarSolicitacaoDTO {
     @NotNull
     private final Long id;
 
-    @NotBlank
     private final String descricao;
 
-    @NotNull
     private final SolicitacaoStatus status;
 
 }
