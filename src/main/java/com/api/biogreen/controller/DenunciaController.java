@@ -1,9 +1,9 @@
 package com.api.biogreen.controller;
 
+import com.api.biogreen.domain.denuncia.DenunciaService;
 import com.api.biogreen.domain.solicitacao.DadosAtualizarSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosCadastroSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosDetalhamentoSolicitacaoDTO;
-import com.api.biogreen.domain.solicitacao.SolicitacaoService;
 import com.api.biogreen.infra.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -19,11 +19,11 @@ import org.springframework.web.util.UriComponentsBuilder;
 import javax.validation.Valid;
 
 @RestController
-@RequestMapping("/solicitacao")
+@RequestMapping("/denuncia")
 @RequiredArgsConstructor
-public class SolicitacaoController {
+public class DenunciaController {
 
-    private final SolicitacaoService solicitacaoService;
+    private final DenunciaService denunciaService;
 
     @PostMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity cadastrar(
@@ -35,9 +35,9 @@ public class SolicitacaoController {
         if (foto.isEmpty()) throw new BadRequestException("É necessário adicionar uma foto para cadastrar");
         if (!foto.getContentType().startsWith("image")) throw new BadRequestException("Arquivo deve ser uma imagem");
 
-        var solicitacao = solicitacaoService.cadastrar(dados, foto, autenticado);
+        var solicitacao = denunciaService.cadastrar(dados, foto, autenticado);
 
-        var uri = uriBuilder.path("solicitacao/{id}").buildAndExpand(solicitacao.getId()).toUri();
+        var uri = uriBuilder.path("denuncia/{id}").buildAndExpand(solicitacao.getId()).toUri();
 
         return ResponseEntity.created(uri).body(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
     }
@@ -54,26 +54,26 @@ public class SolicitacaoController {
             }
         }
 
-        var solicitacao = solicitacaoService.atualizar(dados, foto, authentication);
+        var solicitacao = denunciaService.atualizar(dados, foto, authentication);
 
         return ResponseEntity.ok(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
     }
 
     @GetMapping
     public ResponseEntity<Page<DadosDetalhamentoSolicitacaoDTO>> listarSolicitacoes(@PageableDefault(size = 10) Pageable paginacao){
-        var page = solicitacaoService.listarSolicitacoes(paginacao);
+        var page = denunciaService.listarSolicitacoes(paginacao);
         return ResponseEntity.ok(page);
     }
 
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id){
-        var solicitacao = solicitacaoService.detalhar(id);
+        var solicitacao = denunciaService.detalhar(id);
         return ResponseEntity.ok(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deletar(@PathVariable Long id, Authentication authentication){
-        solicitacaoService.deletar(id, authentication);
+        denunciaService.deletar(id, authentication);
         return ResponseEntity.noContent().build();
     }
 

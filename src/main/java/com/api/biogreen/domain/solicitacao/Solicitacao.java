@@ -12,13 +12,12 @@ import javax.validation.Valid;
 import java.time.Clock;
 import java.time.LocalDate;
 
-@Entity
-@Table(name = "solicitacoes")
+@MappedSuperclass
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Solicitacao {
+public abstract class Solicitacao {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)

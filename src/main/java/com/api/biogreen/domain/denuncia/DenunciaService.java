@@ -1,5 +1,8 @@
-package com.api.biogreen.domain.solicitacao;
+package com.api.biogreen.domain.denuncia;
 
+import com.api.biogreen.domain.solicitacao.DadosAtualizarSolicitacaoDTO;
+import com.api.biogreen.domain.solicitacao.DadosCadastroSolicitacaoDTO;
+import com.api.biogreen.domain.solicitacao.DadosDetalhamentoSolicitacaoDTO;
 import com.api.biogreen.domain.usuario.Usuario;
 import com.api.biogreen.infra.exception.NotFoundException;
 import com.api.biogreen.infra.files.FilesService;
@@ -16,9 +19,9 @@ import java.time.Clock;
 
 @Service
 @RequiredArgsConstructor
-public class SolicitacaoService {
+public class DenunciaService {
 
-    private final SolicitacaoRepository repository;
+    private final DenunciaRepository repository;
     private final FilesService filesService;
 
     @Value("${api.upload-dir.solicitacoes}")
@@ -26,10 +29,10 @@ public class SolicitacaoService {
 
 
     @Transactional
-    public Solicitacao cadastrar(DadosCadastroSolicitacaoDTO dados, MultipartFile foto, Authentication autenticado){
+    public Denuncia cadastrar(DadosCadastroSolicitacaoDTO dados, MultipartFile foto, Authentication autenticado){
 
         var caminhoExportar = filesService.salvar(uploadDir, foto);
-        var solicitacao = new Solicitacao(dados, caminhoExportar, (Usuario) autenticado.getPrincipal(), Clock.systemDefaultZone());
+        var solicitacao = new Denuncia(dados, caminhoExportar, (Usuario) autenticado.getPrincipal(), Clock.systemDefaultZone());
 
         repository.save(solicitacao);
 
@@ -37,10 +40,10 @@ public class SolicitacaoService {
     }
 
     @Transactional
-    public Solicitacao atualizar(DadosAtualizarSolicitacaoDTO dados, MultipartFile foto, Authentication authentication){
+    public Denuncia atualizar(DadosAtualizarSolicitacaoDTO dados, MultipartFile foto, Authentication authentication){
 
-        Solicitacao solicitacao = repository.findById(dados.getId())
-                .orElseThrow(() -> new NotFoundException("Solicitação não encontrada"));
+        Denuncia solicitacao = repository.findById(dados.getId())
+                .orElseThrow(() -> new NotFoundException("Denuncia não encontrada"));
         solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
 
         if (!foto.isEmpty()) filesService.atualizar(solicitacao.getFotoUrl(), foto);
@@ -53,17 +56,17 @@ public class SolicitacaoService {
     @Transactional
     public void deletar(Long id, Authentication authentication) {
 
-        Solicitacao solicitacao = repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Solicitação não encontrada"));
+        Denuncia solicitacao = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Denuncia não encontrada"));
         solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
 
         filesService.deletar(solicitacao.getFotoUrl());
         repository.delete(solicitacao);
     }
 
-    public Solicitacao detalhar(Long id) {
+    public Denuncia detalhar(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new NotFoundException("Solicitação não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Denuncia não encontrada"));
     }
 
     public Page<DadosDetalhamentoSolicitacaoDTO> listarSolicitacoes(Pageable paginacao) {

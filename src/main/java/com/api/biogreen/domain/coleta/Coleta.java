@@ -1,4 +1,4 @@
-package com.api.biogreen.domain.denuncia;
+package com.api.biogreen.domain.coleta;
 
 import com.api.biogreen.domain.solicitacao.DadosCadastroSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.Solicitacao;
@@ -9,9 +9,10 @@ import javax.persistence.Table;
 import java.time.Clock;
 
 @Entity
-@Table(name = "denuncias")
-public class Denuncia extends Solicitacao {
-    public Denuncia(DadosCadastroSolicitacaoDTO dados, String caminhoExportar, Usuario principal, Clock clock) {
+@Table(name = "coletas")
+public class Coleta extends Solicitacao {
+
+    public Coleta(DadosCadastroSolicitacaoDTO dados, String caminhoExportar, Usuario principal, Clock clock) {
         super(dados, caminhoExportar, principal, clock);
     }
 }
