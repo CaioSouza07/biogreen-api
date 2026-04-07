@@ -1,23 +1,21 @@
 package com.api.biogreen.domain.usuario;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 
 import javax.validation.constraints.NotBlank;
 import javax.validation.constraints.NotNull;
 
-@AllArgsConstructor
-@Getter
-public final class DadosDetalhamentoUsuarioDTO {
+@Value
+public class DadosDetalhamentoUsuarioDTO {
 
     @NotNull
-    private final Long id;
+    Long id;
 
     @NotBlank
-    private final String nome;
+    String nome;
 
     @NotBlank
-    private final String email;
+    String email;
 
     public DadosDetalhamentoUsuarioDTO(Usuario usuario){
         this.id = usuario.getId();

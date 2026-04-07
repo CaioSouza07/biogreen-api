@@ -1,7 +1,7 @@
 package com.api.biogreen.domain.solicitacao;
 
 import com.api.biogreen.domain.usuario.Usuario;
-import com.api.biogreen.infra.exception.BadRequestException;
+import com.api.biogreen.infra.exception.NotFoundException;
 import com.api.biogreen.infra.files.FilesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -11,6 +11,9 @@ import org.springframework.security.core.Authentication;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+
+import java.time.Clock;
+import java.time.LocalDate;
 
 
 @Service
@@ -28,7 +31,7 @@ public class SolicitacaoService {
     public Solicitacao cadastrar(DadosCadastroSolicitacaoDTO dados, MultipartFile foto, Authentication autenticado){
 
         var caminhoExportar = filesService.salvar(uploadDir, foto);
-        var solicitacao = new Solicitacao(dados, caminhoExportar, (Usuario) autenticado.getPrincipal());
+        var solicitacao = new Solicitacao(dados, caminhoExportar, (Usuario) autenticado.getPrincipal(), Clock.systemDefaultZone());
 
         repository.save(solicitacao);
 
@@ -39,7 +42,7 @@ public class SolicitacaoService {
     public Solicitacao atualizar(DadosAtualizarSolicitacaoDTO dados, MultipartFile foto, Authentication authentication){
 
         Solicitacao solicitacao = repository.findById(dados.getId())
-                .orElseThrow(() -> new BadRequestException("Solicitação não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Solicitação não encontrada"));
         solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
 
         if (!foto.isEmpty()) filesService.atualizar(solicitacao.getFotoUrl(), foto);
@@ -53,7 +56,7 @@ public class SolicitacaoService {
     public void deletar(Long id, Authentication authentication) {
 
         Solicitacao solicitacao = repository.findById(id)
-                .orElseThrow(() -> new BadRequestException("Solicitação não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Solicitação não encontrada"));
         solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
 
         filesService.deletar(solicitacao.getFotoUrl());
@@ -62,7 +65,7 @@ public class SolicitacaoService {
 
     public Solicitacao detalhar(Long id) {
         return repository.findById(id)
-                .orElseThrow(() -> new BadRequestException("Solicitação não encontrada"));
+                .orElseThrow(() -> new NotFoundException("Solicitação não encontrada"));
     }
 
     public Page<DadosDetalhamentoSolicitacaoDTO> listarSolicitacoes(Pageable paginacao) {

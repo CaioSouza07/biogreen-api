@@ -9,6 +9,8 @@ import lombok.Setter;
 
 import javax.persistence.*;
 import javax.validation.Valid;
+import java.time.Clock;
+import java.time.LocalDate;
 
 @Entity
 @Table(name = "solicitacoes")
@@ -32,15 +34,19 @@ public class Solicitacao {
     @Enumerated(EnumType.STRING)
     private SolicitacaoStatus status;
 
+    @Column(nullable = false)
+    private LocalDate data;
+
     @ManyToOne
     @JoinColumn(name = "usuario_id")
     private Usuario solicitante;
 
-    public Solicitacao(@Valid DadosCadastroSolicitacaoDTO dados, String fotoUrl, Usuario usuario) {
+    public Solicitacao(@Valid DadosCadastroSolicitacaoDTO dados, String fotoUrl, Usuario usuario, Clock clock) {
         this.descricao = dados.getDescricao();
         this.fotoUrl = fotoUrl;
-        this.status = dados.getStatus();
+        this.status = SolicitacaoStatus.PENDENTE;
         this.solicitante = usuario;
+        this.data = LocalDate.now(clock);
     }
 
     public void validarPermissaoRemocao(Usuario usuario){

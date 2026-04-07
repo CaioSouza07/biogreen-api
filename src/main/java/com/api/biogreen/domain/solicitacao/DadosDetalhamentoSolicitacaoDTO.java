@@ -1,19 +1,19 @@
 package com.api.biogreen.domain.solicitacao;
 
 import com.api.biogreen.domain.usuario.DadosDetalhamentoUsuarioDTO;
-import com.api.biogreen.domain.usuario.Usuario;
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 
-@AllArgsConstructor
-@Getter
-public final class DadosDetalhamentoSolicitacaoDTO {
+import java.time.LocalDate;
 
-    private final Long id;
-    private final String descricao;
-    private final String fotoUrl;
-    private final SolicitacaoStatus status;
-    private final DadosDetalhamentoUsuarioDTO usuario;
+@Value
+public class DadosDetalhamentoSolicitacaoDTO {
+
+    Long id;
+    String descricao;
+    String fotoUrl;
+    SolicitacaoStatus status;
+    LocalDate data;
+    DadosDetalhamentoUsuarioDTO usuario;
 
     public DadosDetalhamentoSolicitacaoDTO(Solicitacao solicitacao){
         this.id = solicitacao.getId();
@@ -21,6 +21,7 @@ public final class DadosDetalhamentoSolicitacaoDTO {
         this.fotoUrl = solicitacao.getFotoUrl();
         this.status = solicitacao.getStatus();
         this.usuario = new DadosDetalhamentoUsuarioDTO(solicitacao.getSolicitante());
+        this.data = solicitacao.getData();
     }
 
 

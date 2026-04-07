@@ -1,20 +1,18 @@
 package com.api.biogreen.domain.usuario;
 
-import lombok.AllArgsConstructor;
-import lombok.Getter;
+import lombok.Value;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@AllArgsConstructor
-@Getter
-public final class DadosLoginUsuarioDTO {
+@Value
+public class DadosLoginUsuarioDTO {
 
     @NotBlank
     @Email
-    private final String email;
+    String email;
 
     @NotBlank
-    private final String senha;
+    String senha;
 
 }
