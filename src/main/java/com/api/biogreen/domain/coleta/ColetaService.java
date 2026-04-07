@@ -4,6 +4,7 @@ import com.api.biogreen.domain.solicitacao.DadosAtualizarSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosCadastroSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosDetalhamentoSolicitacaoDTO;
 import com.api.biogreen.domain.usuario.Usuario;
+import com.api.biogreen.infra.exception.BadRequestException;
 import com.api.biogreen.infra.exception.NotFoundException;
 import com.api.biogreen.infra.files.FilesService;
 import lombok.RequiredArgsConstructor;
@@ -29,46 +30,63 @@ public class ColetaService {
 
 
     @Transactional
-    public Coleta cadastrar(DadosCadastroSolicitacaoDTO dados, MultipartFile foto, Authentication autenticado){
+    public DadosDetalhamentoSolicitacaoDTO cadastrar(DadosCadastroSolicitacaoDTO dados, MultipartFile foto, Usuario usuario){
+
+        if (foto.isEmpty()) throw new BadRequestException("É necessário adicionar uma foto para cadastrar");
+        validarFoto(foto);
 
         var caminhoExportar = filesService.salvar(uploadDir, foto);
-        var solicitacao = new Coleta(dados, caminhoExportar, (Usuario) autenticado.getPrincipal(), Clock.systemDefaultZone());
+        var solicitacao = new Coleta(dados, caminhoExportar, usuario, Clock.systemDefaultZone());
         repository.save(solicitacao);
 
-        return solicitacao;
+        return new DadosDetalhamentoSolicitacaoDTO(solicitacao);
     }
 
     @Transactional
-    public Coleta atualizar(DadosAtualizarSolicitacaoDTO dados, MultipartFile foto, Authentication authentication){
+    public DadosDetalhamentoSolicitacaoDTO atualizar(DadosAtualizarSolicitacaoDTO dados, MultipartFile foto, Usuario usuario){
+
+        validarFoto(foto);
 
         Coleta solicitacao = repository.findById(dados.getId())
                 .orElseThrow(() -> new NotFoundException("Coleta não encontrada"));
-        solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
+        solicitacao.validarPermissaoRemocao(usuario);
 
         if (!foto.isEmpty()) filesService.atualizar(solicitacao.getFotoUrl(), foto);
 
         solicitacao.atualizarInformacoes(dados);
 
-        return solicitacao;
+        return new DadosDetalhamentoSolicitacaoDTO(solicitacao);
     }
 
     @Transactional
-    public void deletar(Long id, Authentication authentication) {
+    public void deletar(Long id, Usuario usuario) {
 
         Coleta solicitacao = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Coleta não encontrada"));
-        solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
+        solicitacao.validarPermissaoRemocao(usuario);
 
         filesService.deletar(solicitacao.getFotoUrl());
         repository.delete(solicitacao);
     }
 
-    public Coleta detalhar(Long id) {
-        return repository.findById(id)
+    public DadosDetalhamentoSolicitacaoDTO detalhar(Long id) {
+        var solicitacao=  repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Coleta não encontrada"));
+
+        return new DadosDetalhamentoSolicitacaoDTO(solicitacao);
     }
 
     public Page<DadosDetalhamentoSolicitacaoDTO> listarSolicitacoes(Pageable paginacao) {
         return repository.findAll(paginacao).map(DadosDetalhamentoSolicitacaoDTO::new);
+    }
+
+    private void validarFoto(MultipartFile foto){
+
+
+        if (!foto.isEmpty()) {
+            if (!foto.getContentType().startsWith("image")) {
+                throw new BadRequestException("Arquivo deve ser uma imagem");
+            }
+        }
     }
 }

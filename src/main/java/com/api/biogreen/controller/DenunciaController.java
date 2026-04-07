@@ -4,6 +4,7 @@ import com.api.biogreen.domain.denuncia.DenunciaService;
 import com.api.biogreen.domain.solicitacao.DadosAtualizarSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosCadastroSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosDetalhamentoSolicitacaoDTO;
+import com.api.biogreen.domain.usuario.Usuario;
 import com.api.biogreen.infra.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -35,18 +36,18 @@ public class DenunciaController {
         if (foto.isEmpty()) throw new BadRequestException("É necessário adicionar uma foto para cadastrar");
         if (!foto.getContentType().startsWith("image")) throw new BadRequestException("Arquivo deve ser uma imagem");
 
-        var solicitacao = denunciaService.cadastrar(dados, foto, autenticado);
+        var solicitacao = denunciaService.cadastrar(dados, foto, (Usuario) autenticado.getPrincipal());
 
         var uri = uriBuilder.path("denuncia/{id}").buildAndExpand(solicitacao.getId()).toUri();
 
-        return ResponseEntity.created(uri).body(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
+        return ResponseEntity.created(uri).body(solicitacao);
     }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity atualizar(
             @RequestPart("dados") @Valid DadosAtualizarSolicitacaoDTO dados,
             @RequestParam("file") MultipartFile foto,
-            Authentication authentication
+            Authentication autenticado
     ){
         if (!foto.isEmpty()) {
             if (!foto.getContentType().startsWith("image")) {
@@ -54,9 +55,9 @@ public class DenunciaController {
             }
         }
 
-        var solicitacao = denunciaService.atualizar(dados, foto, authentication);
+        var solicitacao = denunciaService.atualizar(dados, foto, (Usuario) autenticado.getPrincipal());
 
-        return ResponseEntity.ok(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
+        return ResponseEntity.ok(solicitacao);
     }
 
     @GetMapping
@@ -68,12 +69,12 @@ public class DenunciaController {
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id){
         var solicitacao = denunciaService.detalhar(id);
-        return ResponseEntity.ok(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
+        return ResponseEntity.ok(solicitacao);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deletar(@PathVariable Long id, Authentication authentication){
-        denunciaService.deletar(id, authentication);
+    public ResponseEntity deletar(@PathVariable Long id, Authentication autenticado){
+        denunciaService.deletar(id, (Usuario) autenticado.getPrincipal());
         return ResponseEntity.noContent().build();
     }
 

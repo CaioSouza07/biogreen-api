@@ -29,44 +29,45 @@ public class DenunciaService {
 
 
     @Transactional
-    public Denuncia cadastrar(DadosCadastroSolicitacaoDTO dados, MultipartFile foto, Authentication autenticado){
+    public DadosDetalhamentoSolicitacaoDTO cadastrar(DadosCadastroSolicitacaoDTO dados, MultipartFile foto, Usuario usuario){
 
         var caminhoExportar = filesService.salvar(uploadDir, foto);
-        var solicitacao = new Denuncia(dados, caminhoExportar, (Usuario) autenticado.getPrincipal(), Clock.systemDefaultZone());
+        var solicitacao = new Denuncia(dados, caminhoExportar, usuario, Clock.systemDefaultZone());
 
         repository.save(solicitacao);
 
-        return solicitacao;
+        return new DadosDetalhamentoSolicitacaoDTO(solicitacao);
     }
 
     @Transactional
-    public Denuncia atualizar(DadosAtualizarSolicitacaoDTO dados, MultipartFile foto, Authentication authentication){
+    public DadosDetalhamentoSolicitacaoDTO atualizar(DadosAtualizarSolicitacaoDTO dados, MultipartFile foto, Usuario usuario){
 
         Denuncia solicitacao = repository.findById(dados.getId())
                 .orElseThrow(() -> new NotFoundException("Denuncia não encontrada"));
-        solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
+        solicitacao.validarPermissaoRemocao(usuario);
 
         if (!foto.isEmpty()) filesService.atualizar(solicitacao.getFotoUrl(), foto);
 
         solicitacao.atualizarInformacoes(dados);
 
-        return solicitacao;
+        return new DadosDetalhamentoSolicitacaoDTO(solicitacao);
     }
 
     @Transactional
-    public void deletar(Long id, Authentication authentication) {
+    public void deletar(Long id, Usuario usuario) {
 
         Denuncia solicitacao = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Denuncia não encontrada"));
-        solicitacao.validarPermissaoRemocao((Usuario) authentication.getPrincipal());
+        solicitacao.validarPermissaoRemocao(usuario);
 
         filesService.deletar(solicitacao.getFotoUrl());
         repository.delete(solicitacao);
     }
 
-    public Denuncia detalhar(Long id) {
-        return repository.findById(id)
+    public DadosDetalhamentoSolicitacaoDTO detalhar(Long id) {
+        var solicitacao = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Denuncia não encontrada"));
+        return new DadosDetalhamentoSolicitacaoDTO(solicitacao);
     }
 
     public Page<DadosDetalhamentoSolicitacaoDTO> listarSolicitacoes(Pageable paginacao) {

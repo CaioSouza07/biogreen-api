@@ -4,6 +4,7 @@ import com.api.biogreen.domain.coleta.ColetaService;
 import com.api.biogreen.domain.solicitacao.DadosAtualizarSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosCadastroSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosDetalhamentoSolicitacaoDTO;
+import com.api.biogreen.domain.usuario.Usuario;
 import com.api.biogreen.infra.exception.BadRequestException;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.Page;
@@ -32,31 +33,20 @@ public class ColetaController {
             Authentication autenticado,
             UriComponentsBuilder uriBuilder
     ){
-        if (foto.isEmpty()) throw new BadRequestException("É necessário adicionar uma foto para cadastrar");
-        if (!foto.getContentType().startsWith("image")) throw new BadRequestException("Arquivo deve ser uma imagem");
 
-        var solicitacao = coletaService.cadastrar(dados, foto, autenticado);
-
+        var solicitacao = coletaService.cadastrar(dados, foto, (Usuario) autenticado.getPrincipal());
         var uri = uriBuilder.path("coleta/{id}").buildAndExpand(solicitacao.getId()).toUri();
-
-        return ResponseEntity.created(uri).body(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
+        return ResponseEntity.created(uri).body(solicitacao);
     }
 
     @PutMapping(consumes = MediaType.MULTIPART_FORM_DATA_VALUE)
     public ResponseEntity atualizar(
             @RequestPart("dados") @Valid DadosAtualizarSolicitacaoDTO dados,
             @RequestParam("file") MultipartFile foto,
-            Authentication authentication
+            Authentication autenticado
     ){
-        if (!foto.isEmpty()) {
-            if (!foto.getContentType().startsWith("image")) {
-                throw new BadRequestException("Arquivo deve ser uma imagem");
-            }
-        }
-
-        var solicitacao = coletaService.atualizar(dados, foto, authentication);
-
-        return ResponseEntity.ok(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
+        var solicitacao = coletaService.atualizar(dados, foto, (Usuario) autenticado.getPrincipal());
+        return ResponseEntity.ok(solicitacao);
     }
 
     @GetMapping
@@ -68,12 +58,12 @@ public class ColetaController {
     @GetMapping("/{id}")
     public ResponseEntity detalhar(@PathVariable Long id){
         var solicitacao = coletaService.detalhar(id);
-        return ResponseEntity.ok(new DadosDetalhamentoSolicitacaoDTO(solicitacao));
+        return ResponseEntity.ok(solicitacao);
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity deletar(@PathVariable Long id, Authentication authentication){
-        coletaService.deletar(id, authentication);
+    public ResponseEntity deletar(@PathVariable Long id, Authentication autenticado){
+        coletaService.deletar(id, (Usuario) autenticado.getPrincipal());
         return ResponseEntity.noContent().build();
     }
 
