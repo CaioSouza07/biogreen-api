@@ -22,7 +22,6 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
     }
 
-
     @ExceptionHandler(BadRequestException.class)
     public ResponseEntity<ErrorResponseDTO> handleBadRequestException(BadRequestException e){
         var response = new ErrorResponseDTO(e.getMessage(), HttpStatus.BAD_REQUEST.value(), null);
@@ -74,6 +73,5 @@ public class GlobalExceptionHandler {
         var response = new ErrorResponseDTO(e.getMessage(), HttpStatus.BAD_REQUEST.value(), null);
         return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(response);
     }
-
 
 }

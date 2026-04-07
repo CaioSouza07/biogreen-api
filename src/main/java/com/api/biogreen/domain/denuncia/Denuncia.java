@@ -1,4 +1,4 @@
-package com.api.biogreen.domain.solicitacao;
+package com.api.biogreen.domain.denuncia;
 
 import com.api.biogreen.domain.usuario.Usuario;
 import com.api.biogreen.infra.exception.UsuarioNaoPermitidoException;
@@ -13,12 +13,12 @@ import java.time.Clock;
 import java.time.LocalDate;
 
 @Entity
-@Table(name = "solicitacoes")
+@Table(name = "denuncias")
 @NoArgsConstructor
 @AllArgsConstructor
 @Getter
 @Setter
-public class Solicitacao {
+public class Denuncia {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -32,21 +32,21 @@ public class Solicitacao {
 
     @Column(nullable = false)
     @Enumerated(EnumType.STRING)
-    private SolicitacaoStatus status;
+    private DenunciaStatus status;
 
     @Column(nullable = false)
     private LocalDate data;
 
     @ManyToOne
     @JoinColumn(name = "usuario_id")
-    private Usuario solicitante;
+    private Usuario denunciante;
 
-    public Solicitacao(@Valid DadosCadastroSolicitacaoDTO dados, String fotoUrl, Usuario usuario, Clock clock) {
+    public Denuncia(@Valid DadosCadastroDenunciaDTO dados, String fotoUrl, Usuario usuario, Clock clock){
         this.descricao = dados.getDescricao();
         this.fotoUrl = fotoUrl;
-        this.status = SolicitacaoStatus.PENDENTE;
-        this.solicitante = usuario;
+        this.status = DenunciaStatus.PENDENTE;
         this.data = LocalDate.now(clock);
+        this.denunciante = usuario;
     }
 
     public void validarPermissaoRemocao(Usuario usuario){
@@ -54,13 +54,11 @@ public class Solicitacao {
             return;
         }
 
-        if(!this.solicitante.equals(usuario)){
-            throw new UsuarioNaoPermitidoException("Apenas o autor pode efetuar alterações ou remoção nessa solicitação");
+        if (!this.denunciante.equals(usuario)){
+            throw new UsuarioNaoPermitidoException("Apenas o autor pode efetuar alterações ou remoção nessa denuncia");
         }
     }
 
-    public void atualizarInformacoes(DadosAtualizarSolicitacaoDTO dados) {
-        if (dados.getDescricao() != null) this.descricao = dados.getDescricao();
-        if (dados.getStatus() != null) this.status = dados.getStatus();
-    }
+    // aqui preciso implementar o metodo de atualizar as informacoes ainda
+
 }
