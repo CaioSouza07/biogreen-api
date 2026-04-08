@@ -2,6 +2,7 @@ package com.api.biogreen.domain.manual;
 
 import com.api.biogreen.domain.usuario.Usuario;
 import com.api.biogreen.infra.exception.BadRequestException;
+import com.api.biogreen.infra.exception.NotFoundException;
 import com.api.biogreen.infra.files.FilesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
@@ -25,7 +26,7 @@ public class ManualService {
 
 
     @Transactional
-    public DadosDetalhamentoManualDTO cadastrar(@Valid DadosCadastroManualDTO dados, MultipartFile pdf, Usuario usuario) {
+    public DadosDetalhamentoManualDTO cadastrar(DadosCadastroManualDTO dados, MultipartFile pdf, Usuario usuario) {
 
         if (pdf.isEmpty()) throw new BadRequestException("É necessário adicionar um PDF para cadastrar");
         validarPdf(pdf);
@@ -37,6 +38,24 @@ public class ManualService {
         return new DadosDetalhamentoManualDTO(manual);
     }
 
+    public DadosDetalhamentoManualDTO atualizar(DadosAtualizarManualDTO dados, MultipartFile pdf) {
+        validarPdf(pdf);
+
+        Manual manual = repository.findById(dados.getId())
+                .orElseThrow(() -> new NotFoundException("Manual não encontrado"));
+
+        if (!pdf.isEmpty()) filesService.atualizar(manual.getManualUrl(), pdf);
+
+        manual.atualizarInformacoes(dados);
+        return new DadosDetalhamentoManualDTO(manual);
+    }
+
+    public DadosDetalhamentoManualDTO detalhar(Long id) {
+        var manual = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Manual não encontrado"));
+        return new DadosDetalhamentoManualDTO(manual);
+    }
+
     private void validarPdf(MultipartFile pdf){
         if (!pdf.isEmpty()) {
             if (!MediaType.APPLICATION_PDF_VALUE.equals(pdf.getContentType())) {
@@ -44,5 +63,4 @@ public class ManualService {
             }
         }
     }
-
 }

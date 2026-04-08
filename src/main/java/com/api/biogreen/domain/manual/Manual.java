@@ -42,4 +42,8 @@ public class Manual {
         this.data = LocalDate.now();
         this.responsavel = usuario;
     }
+
+    public void atualizarInformacoes(DadosAtualizarManualDTO dados) {
+        if (dados.getTitulo() != null) this.titulo = dados.getTitulo();
+    }
 }
