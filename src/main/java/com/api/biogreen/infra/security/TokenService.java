@@ -22,14 +22,13 @@ public class TokenService {
         try{
             Algorithm algorithm = Algorithm.HMAC256(secreto);
 
-            String token = JWT.create()
+            return JWT.create()
                     .withIssuer("biogreen-api")
                     .withSubject(usuario.getEmail())
                     .withExpiresAt(gerarDataExpiracao())
                     .sign(algorithm);
-            return token;
         }catch (JWTCreationException e){
-            throw new RuntimeException("Erro ao autenticar");
+            throw new RuntimeException("Erro ao criar token");
         }
     }
 

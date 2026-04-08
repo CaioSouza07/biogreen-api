@@ -6,12 +6,13 @@ import com.api.biogreen.infra.exception.NotFoundException;
 import com.api.biogreen.infra.files.FilesService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.MediaType;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 
-import javax.validation.Valid;
 import java.time.Clock;
 
 @Service
@@ -38,6 +39,7 @@ public class ManualService {
         return new DadosDetalhamentoManualDTO(manual);
     }
 
+    @Transactional
     public DadosDetalhamentoManualDTO atualizar(DadosAtualizarManualDTO dados, MultipartFile pdf) {
         validarPdf(pdf);
 
@@ -54,6 +56,18 @@ public class ManualService {
         var manual = repository.findById(id)
                 .orElseThrow(() -> new NotFoundException("Manual não encontrado"));
         return new DadosDetalhamentoManualDTO(manual);
+    }
+
+    public Page<DadosDetalhamentoManualDTO> listarManuais(Pageable paginacao) {
+        return repository.findAll(paginacao).map(DadosDetalhamentoManualDTO::new);
+    }
+
+    @Transactional
+    public void deletar(Long id){
+        var manual = repository.findById(id)
+                .orElseThrow(() -> new NotFoundException("Manual não encontrado"));
+        filesService.deletar(manual.getManualUrl());
+        repository.delete(manual);
     }
 
     private void validarPdf(MultipartFile pdf){

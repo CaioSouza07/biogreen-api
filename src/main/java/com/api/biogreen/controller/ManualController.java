@@ -16,7 +16,6 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.util.UriComponentsBuilder;
 
-import javax.print.attribute.standard.Media;
 import javax.validation.Valid;
 
 @RestController
@@ -58,5 +57,11 @@ public class ManualController {
     public ResponseEntity<Page<DadosDetalhamentoManualDTO>> listarManuais(@PageableDefault(size = 10) Pageable paginacao){
         var page = service.listarManuais(paginacao);
         return ResponseEntity.ok(page);
+    }
+
+    @DeleteMapping("/{id}")
+    public ResponseEntity deletar(@PathVariable Long id){
+        service.deletar(id);
+        return ResponseEntity.noContent().build();
     }
 }
