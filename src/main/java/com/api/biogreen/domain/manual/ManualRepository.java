@@ -1,0 +1,7 @@
+package com.api.biogreen.domain.manual;
+
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ManualRepository extends JpaRepository<Manual, Long> {
+
+}

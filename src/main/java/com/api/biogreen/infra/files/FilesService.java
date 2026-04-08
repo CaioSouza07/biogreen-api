@@ -1,16 +1,14 @@
 package com.api.biogreen.infra.files;
 
-import com.api.biogreen.infra.exception.UploadImagemException;
+import com.api.biogreen.infra.exception.UploadFileException;
 import com.api.biogreen.utils.TratadorArquivo;
 import org.springframework.stereotype.Service;
 import org.springframework.web.multipart.MultipartFile;
 
 import java.io.IOException;
-import java.io.InputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
-import java.nio.file.StandardCopyOption;
 import java.util.UUID;
 
 @Service
@@ -24,7 +22,7 @@ public class FilesService {
         try {
             file.transferTo(caminhoExportar);
         } catch (IOException e) {
-            throw new UploadImagemException("Erro interno ao salvar a imagem no diretório");
+            throw new UploadFileException("Erro interno ao salvar o arquivo no diretório");
         }
 
         return caminhoExportar.toString();
@@ -37,7 +35,7 @@ public class FilesService {
         try {
             file.transferTo(caminhoArquivo);
         } catch (IOException e) {
-            throw new UploadImagemException("Erro interno ao atualizar a imagem");
+            throw new UploadFileException("Erro interno ao atualizar o arquivo");
         }
 
     }
@@ -49,7 +47,7 @@ public class FilesService {
         try {
             Files.deleteIfExists(caminhoArquivo);
         } catch (IOException e) {
-            throw new UploadImagemException("Erro interno ao deletar a imagem");
+            throw new UploadFileException("Erro interno ao deletar o arquivo");
         }
     }
 

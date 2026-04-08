@@ -1,11 +1,14 @@
 package com.api.biogreen.domain.manual;
 
+import com.api.biogreen.domain.usuario.Usuario;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
 import javax.persistence.*;
+import javax.validation.Valid;
+import java.time.Clock;
 import java.time.LocalDate;
 
 @Entity
@@ -20,7 +23,7 @@ public class Manual {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @Column(nullable = false)
+    @Column(nullable = false, name = "manual_url")
     private String manualUrl;
 
     @Column(nullable = false)
@@ -29,4 +32,14 @@ public class Manual {
     @Column(nullable = false)
     private LocalDate data;
 
+    @ManyToOne
+    @JoinColumn(name = "responsavel_id")
+    private Usuario responsavel;
+
+    public Manual(@Valid DadosCadastroManualDTO dados, String caminhoExportar, Usuario usuario, Clock clock) {
+        this.manualUrl = caminhoExportar;
+        this.titulo = dados.getTitulo();
+        this.data = LocalDate.now();
+        this.responsavel = usuario;
+    }
 }
