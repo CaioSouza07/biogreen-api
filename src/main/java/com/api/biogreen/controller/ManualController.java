@@ -1,6 +1,7 @@
 package com.api.biogreen.controller;
 
 import com.api.biogreen.domain.manual.DadosCadastroManualDTO;
+import com.api.biogreen.domain.manual.DadosDetalhamentoManualDTO;
 import com.api.biogreen.domain.manual.ManualService;
 import com.api.biogreen.domain.usuario.Usuario;
 import lombok.RequiredArgsConstructor;
