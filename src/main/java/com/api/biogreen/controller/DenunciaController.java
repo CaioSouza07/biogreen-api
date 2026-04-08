@@ -33,11 +33,8 @@ public class DenunciaController {
             Authentication autenticado,
             UriComponentsBuilder uriBuilder
     ){
-        if (foto.isEmpty()) throw new BadRequestException("É necessário adicionar uma foto para cadastrar");
-        if (!foto.getContentType().startsWith("image")) throw new BadRequestException("Arquivo deve ser uma imagem");
 
         var solicitacao = denunciaService.cadastrar(dados, foto, (Usuario) autenticado.getPrincipal());
-
         var uri = uriBuilder.path("denuncia/{id}").buildAndExpand(solicitacao.getId()).toUri();
 
         return ResponseEntity.created(uri).body(solicitacao);
@@ -49,14 +46,8 @@ public class DenunciaController {
             @RequestParam("file") MultipartFile foto,
             Authentication autenticado
     ){
-        if (!foto.isEmpty()) {
-            if (!foto.getContentType().startsWith("image")) {
-                throw new BadRequestException("Arquivo deve ser uma imagem");
-            }
-        }
 
         var solicitacao = denunciaService.atualizar(dados, foto, (Usuario) autenticado.getPrincipal());
-
         return ResponseEntity.ok(solicitacao);
     }
 

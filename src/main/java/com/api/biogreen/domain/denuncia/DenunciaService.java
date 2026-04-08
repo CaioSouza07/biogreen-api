@@ -4,6 +4,7 @@ import com.api.biogreen.domain.solicitacao.DadosAtualizarSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosCadastroSolicitacaoDTO;
 import com.api.biogreen.domain.solicitacao.DadosDetalhamentoSolicitacaoDTO;
 import com.api.biogreen.domain.usuario.Usuario;
+import com.api.biogreen.infra.exception.BadRequestException;
 import com.api.biogreen.infra.exception.NotFoundException;
 import com.api.biogreen.infra.files.FilesService;
 import lombok.RequiredArgsConstructor;
@@ -30,6 +31,8 @@ public class DenunciaService {
 
     @Transactional
     public DadosDetalhamentoSolicitacaoDTO cadastrar(DadosCadastroSolicitacaoDTO dados, MultipartFile foto, Usuario usuario){
+        if (foto.isEmpty()) throw new BadRequestException("É necessário adicionar uma foto para cadastrar");
+        validarFoto(foto);
 
         var caminhoExportar = filesService.salvar(uploadDir, foto);
         var solicitacao = new Denuncia(dados, caminhoExportar, usuario, Clock.systemDefaultZone());
@@ -41,6 +44,7 @@ public class DenunciaService {
 
     @Transactional
     public DadosDetalhamentoSolicitacaoDTO atualizar(DadosAtualizarSolicitacaoDTO dados, MultipartFile foto, Usuario usuario){
+        validarFoto(foto);
 
         Denuncia solicitacao = repository.findById(dados.getId())
                 .orElseThrow(() -> new NotFoundException("Denuncia não encontrada"));
@@ -72,5 +76,15 @@ public class DenunciaService {
 
     public Page<DadosDetalhamentoSolicitacaoDTO> listarSolicitacoes(Pageable paginacao) {
         return repository.findAll(paginacao).map(DadosDetalhamentoSolicitacaoDTO::new);
+    }
+
+    private void validarFoto(MultipartFile foto){
+
+
+        if (!foto.isEmpty()) {
+            if (!foto.getContentType().startsWith("image")) {
+                throw new BadRequestException("Arquivo deve ser uma imagem");
+            }
+        }
     }
 }
