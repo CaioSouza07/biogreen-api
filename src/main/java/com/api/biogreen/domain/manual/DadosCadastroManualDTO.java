@@ -10,7 +10,7 @@ import javax.validation.constraints.NotBlank;
 public final class DadosCadastroManualDTO {
 
     @NotBlank
-    private String titulo;
+    private final String titulo;
 
     @JsonCreator
     public DadosCadastroManualDTO(
