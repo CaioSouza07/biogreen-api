@@ -30,7 +30,7 @@ Nele é possível registrar solicitações de coletas de itens, registrar denún
 * **Repository:** acesso a dados
 * **DTOs:** transporte de dados entre camadas 
 * **Infra:** segurança, exceções e integrações externas
-* **Client:** integração com APIs externas
+* **Client:** consumo de APIs externas (ViaCEP e Nominatim)
 
 ## Estrutura de Pastas
 
@@ -106,7 +106,7 @@ spring.servlet.multipart.max-file-size=10MB
 3. Executar a aplicação
 
    1. Abra o projeto na sua IDE
-   2. Localize a classe principal: **BiogreenApplication.java**
+   2. Localize a classe principal: ```BiogreenApplication.java```
    3. Execute o método **main** da classe
 
 > **Dica:** Caso  for executar o projeto com Maven, execute com o seguinte código:
