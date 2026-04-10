@@ -74,6 +74,44 @@ src/main/java/com.api.biogreen
 * Scripts em **resourses/db/migration**
 * Versionamento incremental
 
+## Testes da API
+
+* A API foi testada utilizando Postman
+* Testes manuais dos endpoints
+* Validação de autenticação, regras e respostas HTTP
+* Veja aqui [JSON da Collection Postman](https://github.com/CaioSouza07/biogreen-api/blob/main/BioGreen%20API%20Collections.postman_collection.json)
+
+## Como Executar o Projeto
+
+1. Clonar o repositório
+```
+git clone https://github.com/CaioSouza07/biogreen-api.git
+```
+2. Configurar o **application.properties**
+```properties
+spring.application.name=biogreen
+
+spring.datasource.url=[COLOQUE AQUI URL DO BANCO DE DADOS]
+spring.datasource.username=[USUARIO DO BANCO]
+spring.datasource.password=[SENHA DO BANCO]
+
+# Configure abaixo as variáveis de ambiente ou deixe o default
+api.security.token.secret=${JWT_SECRET:my-secret-key}
+api.upload-dir.solicitacoes=${DIR_SOLICITACOES:uploads/solicitacoes}
+api.upload-dir.manuais=${DIR_MANUAIS:uploads/manuais}
+
+
+spring.servlet.multipart.max-file-size=10MB
+```
+3. Executar a aplicação
+
+   1. Abra o projeto na sua IDE
+   2. Localize a classe principal: **BiogreenApplication.java**
+   3. Execute o método **main** da classe
+
+> **Dica:** Caso  for executar o projeto com Maven, execute com o seguinte código:
+```mvn spring-boot:run```
+
 
 
 
