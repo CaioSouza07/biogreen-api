@@ -1,0 +1,883 @@
+{
+  "info": {
+    "_postman_id": "adac6e65-13f9-4ca3-a2c3-6d2b71f6d57d",
+    "name": "BioGreen API Collections",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "_exporter_id": "53646966"
+  },
+  "item": [
+    {
+      "name": "Usuarios",
+      "item": [
+        {
+          "name": "Cadastro Usuario",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nome\" : \"Jhonattas Souza\",\r\n    \"email\" : \"jhomail\",\r\n    \"senha\" : \"123\",\r\n    \"role\" : \"USER\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/cadastro",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "cadastro"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Login Usuario",
+          "request": {
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"email\": \"caio@email.com\",\r\n    \"senha\" : \"123\"\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/auth/login",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "auth",
+                "login"
+              ]
+            }
+          },
+          "response": []
+        }
+      ],
+      "description": "Tudo referente a usuarios e autenticação ficará nesta pasta"
+    },
+    {
+      "name": "Coletas",
+      "item": [
+        {
+          "name": "Criar Coleta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTU4ODYwN30.pr9fHctmLo59ghhYjU8gS8Nn7VVabAQj5TskC6R9834",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "dados",
+                  "value": "{\"descricao\" : \"Coletar reciclaveis\"}",
+                  "type": "text",
+                  "uuid": "2ffcf0eb-5638-49d9-9ed5-95d24e0ad9f0",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "88327311-9b6d-47bf-9722-8de0cdc25ec4",
+                  "src": "/C:/Users/cdsouza/Downloads/IMAGEM COLETA 1.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/coleta",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "coleta"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ler Coleta",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTc0NjU2MX0.nDHPAigdiMojI5sITdzaes2cgiUPUx5jwU_90hvLZ_g",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "http://localhost:8080/coleta/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "coleta",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Coletas",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTgyOTUwNH0.mxseUHRV_C4-Y_pbHLA0Hh8PV-fsxyGxqn4KXB1b82Q",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "http://localhost:8080/coleta",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "coleta"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Coleta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJrYXVlQGVtYWlsLmNvbSIsImV4cCI6MTc3NTU5MDU5Nn0.UeOJtnMy2Y3vn07f0TSvNCVPyClzBKr305531OYx8Pk",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "dados",
+                  "value": "{\"id\" : 1}",
+                  "type": "text",
+                  "uuid": "e40ce882-6c6b-41eb-b1c6-0f1d11c69326",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "1f3b4b2c-797e-4a63-9eda-2e991a5c045f",
+                  "src": "/C:/Users/cdsouza/Downloads/IMAGEM COLETA 1.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/coleta",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "coleta"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Coleta",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTU5MDY1Mn0.6y07zh_Lu8FBFk1KP0KHagVa_uC0gpaui1b6zCuL2NI",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/coleta/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "coleta",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Denuncias",
+      "item": [
+        {
+          "name": "Criar Denuncia",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTU5MTExMX0.w2qPGKjhNakwxS6aL9Zpwxau6W_90otkN2--E0jsS-U",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "dados",
+                  "value": "{\"descricao\":\"Muita coisa jogada no lixo\"}",
+                  "type": "text",
+                  "uuid": "c11b9bfa-ec95-489d-8aeb-5e027ddf02e4",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "db5d555f-b33d-49b2-8f89-375c06d22c6b",
+                  "src": "/C:/Users/cdsouza/Downloads/IMAGEM DENUNCIA 1.jpg"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/denuncia",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "denuncia"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ler Denuncia",
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          },
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "vesgvtvetg e",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": []
+            },
+            "url": {
+              "raw": "http://localhost:8080/denuncia/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "denuncia",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Denuncias",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTU5MTExMX0.w2qPGKjhNakwxS6aL9Zpwxau6W_90otkN2--E0jsS-U",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/denuncia",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "denuncia"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Denuncia",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTU5MTExMX0.w2qPGKjhNakwxS6aL9Zpwxau6W_90otkN2--E0jsS-U",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "dados",
+                  "value": "{\"id\":\"1\", \"status\":\"EM_ANDAMENTO\"}",
+                  "type": "text",
+                  "uuid": "e40ce882-6c6b-41eb-b1c6-0f1d11c69326",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "1f3b4b2c-797e-4a63-9eda-2e991a5c045f",
+                  "value": null
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/denuncia",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "denuncia"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Denuncia",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTU5MTExMX0.w2qPGKjhNakwxS6aL9Zpwxau6W_90otkN2--E0jsS-U",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/denuncia/2",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "denuncia",
+                "2"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Manuais",
+      "item": [
+        {
+          "name": "Criar Manual",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTY3NDA5N30.w_hcaMOO97prnwJx-rOZAD9UaLPJpFg4ryrEqXg5ZUs",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "dados",
+                  "value": "{\"titulo\":\"Coleta de papelão\"}",
+                  "type": "text",
+                  "uuid": "3d94784a-c730-4599-967d-01e4e32bf2b5",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "ef38b1bb-c956-42fb-b428-3b27c0fbc052",
+                  "src": "/C:/Users/cdsouza/Downloads/DOCUMENTO PROJETO - MyGym.pdf"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/manual",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "manual"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Ler Manual",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTY3Mzk0Nn0.Flq0QPsD0hTmP0zD53rYvrZgdo5uVCA6Cl0w-FPepYo",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/manual/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "manual",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Manuais",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTY3NDA5N30.w_hcaMOO97prnwJx-rOZAD9UaLPJpFg4ryrEqXg5ZUs",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/manual",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "manual"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Atualizar Manual",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTY3NDA5N30.w_hcaMOO97prnwJx-rOZAD9UaLPJpFg4ryrEqXg5ZUs",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "PUT",
+            "header": [],
+            "body": {
+              "mode": "formdata",
+              "formdata": [
+                {
+                  "key": "dados",
+                  "value": "{\"id\":\"1\" ,\"titulo\":\"Coleta de sei la o que\"}",
+                  "type": "text",
+                  "uuid": "bf6887ad-eae9-4ae5-89ba-95e9d600d525",
+                  "contentType": "application/json"
+                },
+                {
+                  "key": "file",
+                  "type": "file",
+                  "uuid": "3255ac2c-36a2-4498-b0d7-c08d00fd777c",
+                  "src": "/C:/Users/cdsouza/Downloads/ESCOPO DO PLANO DE PROJETO - MyGym.pdf"
+                }
+              ]
+            },
+            "url": {
+              "raw": "http://localhost:8080/manual",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "manual"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Manual",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTY3NDA5N30.w_hcaMOO97prnwJx-rOZAD9UaLPJpFg4ryrEqXg5ZUs",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/manual/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "manual",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "Locais Descarte",
+      "item": [
+        {
+          "name": "Criar LocalDescarte",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTgyOTUwNH0.mxseUHRV_C4-Y_pbHLA0Hh8PV-fsxyGxqn4KXB1b82Q",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "POST",
+            "header": [],
+            "body": {
+              "mode": "raw",
+              "raw": "{\r\n    \"nomeLocal\" : \"Local de Descarte - Região Lest\",\r\n    \"cep\" : \"89225-560\",\r\n    \"numero\" : 2654\r\n}",
+              "options": {
+                "raw": {
+                  "language": "json"
+                }
+              }
+            },
+            "url": {
+              "raw": "http://localhost:8080/localdescarte",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "localdescarte"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Detalhar LocalDescarte",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTgzNjExNX0.Rkxw0tXjlKovDZExnzUQWNuEBB6znJRv6geo7BxK-t0",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/localdescarte/1",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "localdescarte",
+                "1"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Listar Locais",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTgzNjExNX0.Rkxw0tXjlKovDZExnzUQWNuEBB6znJRv6geo7BxK-t0",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/localdescarte",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "localdescarte"
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "Deletar Local",
+          "request": {
+            "auth": {
+              "type": "bearer",
+              "bearer": [
+                {
+                  "key": "token",
+                  "value": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJiaW9ncmVlbi1hcGkiLCJzdWIiOiJjYWlvQGVtYWlsLmNvbSIsImV4cCI6MTc3NTgzNjExNX0.Rkxw0tXjlKovDZExnzUQWNuEBB6znJRv6geo7BxK-t0",
+                  "type": "string"
+                }
+              ]
+            },
+            "method": "DELETE",
+            "header": [],
+            "url": {
+              "raw": "http://localhost:8080/localdescarte/3",
+              "protocol": "http",
+              "host": [
+                "localhost"
+              ],
+              "port": "8080",
+              "path": [
+                "localdescarte",
+                "3"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    },
+    {
+      "name": "APIS Externas",
+      "item": [
+        {
+          "name": "TESTAR OPEN STREET API",
+          "protocolProfileBehavior": {
+            "disabledSystemHeaders": {
+              "user-agent": true
+            }
+          },
+          "request": {
+            "method": "GET",
+            "header": [
+              {
+                "key": "User-Agent",
+                "value": "BioGreenAPI/1.0 (caiodesouza.cds@gmail.com)",
+                "type": "text"
+              }
+            ],
+            "url": {
+              "raw": "https://nominatim.openstreetmap.org/search?format=json&street=rua%20lucidônio%20placidina%20maria%2078&city=joinville&state=SC&country=Brazil&countrycodes=br&limit=1&addressdetails=1",
+              "protocol": "https",
+              "host": [
+                "nominatim",
+                "openstreetmap",
+                "org"
+              ],
+              "path": [
+                "search"
+              ],
+              "query": [
+                {
+                  "key": "format",
+                  "value": "json"
+                },
+                {
+                  "key": "street",
+                  "value": "rua%20lucidônio%20placidina%20maria%2078"
+                },
+                {
+                  "key": "city",
+                  "value": "joinville"
+                },
+                {
+                  "key": "state",
+                  "value": "SC"
+                },
+                {
+                  "key": "country",
+                  "value": "Brazil"
+                },
+                {
+                  "key": "countrycodes",
+                  "value": "br"
+                },
+                {
+                  "key": "limit",
+                  "value": "1"
+                },
+                {
+                  "key": "addressdetails",
+                  "value": "1"
+                }
+              ]
+            }
+          },
+          "response": []
+        },
+        {
+          "name": "TESTAR VIACEP",
+          "request": {
+            "method": "GET",
+            "header": [],
+            "url": {
+              "raw": "https://viacep.com.br/ws/71423-002/json",
+              "protocol": "https",
+              "host": [
+                "viacep",
+                "com",
+                "br"
+              ],
+              "path": [
+                "ws",
+                "71423-002",
+                "json"
+              ]
+            }
+          },
+          "response": []
+        }
+      ]
+    }
+  ]
+}
