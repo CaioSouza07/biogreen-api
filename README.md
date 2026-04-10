@@ -18,6 +18,8 @@ Nele é possível registrar solicitações de coletas de itens, registrar denún
 * Spring Security
 * JWT (JSON Web Token)
 * Flyway (migrations)
+* Lombok
+* Bean Validation
 * REST Template
 * Maven
 * PostgreSQL
