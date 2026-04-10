@@ -15,5 +15,5 @@ public class ViaCepResponseDTO {
     private String localidade;
     private String uf;
     private String estado;
-
+    private boolean error;
 }

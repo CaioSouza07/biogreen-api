@@ -1,5 +1,7 @@
 package com.api.biogreen.domain.local_descarte;
 
+import com.api.biogreen.domain.endereco.CoordenadasCepDTO;
+import com.api.biogreen.domain.endereco.EnderecoCepDTO;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -49,16 +51,16 @@ public class LocalDescarte {
     @Column(nullable = false)
     private double longitude;
 
-    public LocalDescarte(@Valid DadosCadastroLocalDescarteDTO dados, String logradouro, String bairro, String cidade, String estado, double latitude, double longitude) {
+    public LocalDescarte(DadosCadastroLocalDescarteDTO dados, EnderecoCepDTO enderecoCep, CoordenadasCepDTO coordenadas) {
         this.nomeLocal = dados.getNomeLocal();
         this.cep = dados.getCep();
-        this.logradouro = logradouro;
+        this.logradouro = enderecoCep.getLogradouro();
         this.numero = dados.getNumero();
         this.complemento = dados.getComplemento();
-        this.bairro = bairro;
-        this.cidade = cidade;
-        this.estado = estado;
-        this.latitude = latitude;
-        this.longitude = longitude;
+        this.bairro = enderecoCep.getBairro();
+        this.cidade = enderecoCep.getCidade();
+        this.estado = enderecoCep.getEstado();
+        this.latitude = coordenadas.getLatitude();
+        this.longitude = coordenadas.getLongitude();
     }
 }

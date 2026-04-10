@@ -1,0 +1,1 @@
+ALTER TABLE locais_descarte ALTER COLUMN cep TYPE VARCHAR(9);

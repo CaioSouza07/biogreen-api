@@ -40,6 +40,12 @@ public class GlobalExceptionHandler {
         return ResponseEntity.status(HttpStatus.FORBIDDEN).body(response);
     }
 
+    @ExceptionHandler(CepNaoExistenteException.class)
+    public ResponseEntity<ErrorResponseDTO> handleCepNaoExistenteException(CepNaoExistenteException e){
+        var response = new ErrorResponseDTO(e.getMessage(), HttpStatus.NOT_FOUND.value(), null);
+        return ResponseEntity.status(HttpStatus.NOT_FOUND).body(response);
+    }
+
     @ExceptionHandler(MethodArgumentNotValidException.class)
     public ResponseEntity<ErrorResponseDTO> handleValidationBadRequestException(MethodArgumentNotValidException e){
         var errors = e.getFieldErrors();

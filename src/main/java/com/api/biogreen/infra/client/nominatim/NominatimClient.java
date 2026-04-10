@@ -20,17 +20,12 @@ public class NominatimClient {
 
     public CoordenadasCepDTO geocodificar(EnderecoCepDTO dados) {
 
-        String enderecoCompleto = String.format(
-                "%s, %d, %s, %s",
-                dados.getLogradouro(),
-                dados.getNumero(),
-                dados.getCidade(),
-                dados.getUf()
-        );
-
         var url = UriComponentsBuilder
                 .fromHttpUrl("https://nominatim.openstreetmap.org/search")
-                .queryParam("q", enderecoCompleto)
+                .queryParam("street", dados.getLogradouro() + " " + dados.getNumero())
+                .queryParam("city", dados.getCidade())
+                .queryParam("state", dados.getEstado())
+                .queryParam("country", "Brazil")
                 .queryParam("format", "json")
                 .queryParam("limit", 1)
                 .queryParam("countrycodes", "br")
